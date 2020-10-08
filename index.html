@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>CLOUD OF NEWS</title>
+    <meta name="description" content="" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="keywords" content="" />
+
+    <!--Open graph meta tags-->
+    <meta property="og:title" content="" />
+    <meta property="og:type" content="" />
+    <meta property="og:url" content="" />
+    <meta property="og:image" content="" />
+
+    <link rel="manifest" href="site.webmanifest" />
+    <link rel="apple-touch-icon" href="favicon.ico" />
+
+    <!-- Hotjar Tracking Code for www.cloudofnews.com -->
+    <script>
+      (function (h, o, t, j, a, r) {
+        h.hj =
+          h.hj ||
+          function () {
+            (h.hj.q = h.hj.q || []).push(arguments);
+          };
+        h._hjSettings = { hjid: 2023255, hjsv: 6 };
+        a = o.getElementsByTagName("head")[0];
+        r = o.createElement("script");
+        r.async = 1;
+        r.src = t + h._hjSettings.hjid + j + h._hjSettings.hjsv;
+        a.appendChild(r);
+      })(window, document, "https://static.hotjar.com/c/hotjar-", ".js?sv=");
+    </script>
+
+    <!-- stylesheets -->
+    <link rel="stylesheet" href="css/css.css" />
+
+    <meta name="theme-color" content="#fafafa" />
+  </head>
+
+  <body>
+    <header>
+      <img src="imgs/world-map-invert.jpg" alt="World map icon" />
+      <h1>CLOUD OF NEWS - WORLD HEADLINES</h1>
+    </header>
+
+    <!-- main content -->
+    <main>
+      <p id="date"></p>
+      <div class="slidercontainer">
+        <input
+          type="range"
+          min="1"
+          max="100"
+          value="1"
+          class="slider"
+          id="inputslider"
+        />
+        
+      </div>
+      <a href="https://www1.folha.uol.com.br/internacional/en/">
+        <img src="/imgs/test1-en.png" alt="Wordcloud world map" class="map" />
+      </a>
+    </main>
+
+    <!-- footer -->
+    <footer>
+      <p>
+        Why are we here? <br />
+        The proposal of this website is to gather worldwide headlines and
+        display them in a wordcloud format, so you can get a glimpse of what is
+        going on around the world.
+      </p>
+      <br />
+      <p>
+        What is a wordcloud? <br />
+        According to Google it is
+        <q
+          >an image composed of words used in a particular text or subject, in
+          which the size of each word indicates its frequency or importance.</q
+        >
+      </p>
+      <br />
+      <p>
+        If you would like to receive alerts for when specific keywords occur
+        around the world contact us at:
+        <a href="mailto:cloudofnews.contact@gmail.com"
+          >cloudofnews.contact@gmail.com</a
+        >
+      </p>
+    </footer>
+
+    <script src="js/js.js"></script>
+
+    <!-- Google Analytics:  -->
+    <script>
+      window.ga = function () {
+        ga.q.push(arguments);
+      };
+      ga.q = [];
+      ga.l = +new Date();
+      ga("create", "UA-179542720-1", "auto");
+      ga("set", "anonymizeIp", true);
+      ga("set", "transport", "beacon");
+      ga("send", "pageview");
+    </script>
+    <script src="https://www.google-analytics.com/analytics.js" async></script>
+  </body>
+</html>
