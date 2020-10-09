@@ -11,7 +11,10 @@ for (i = 0; i < 100; i++) {
   var b = d.setDate(d.getDate() - 1);
   daysOfYear.push(new Date(b));
 }
-date.innerHTML = daysOfYear[0];
+
+date.innerHTML = daysOfYear[0]; // default date onload
+
+// iterates inputValues over daysOfYear array
 slider.oninput = function () {
   var inputValues = this.value;
   date.innerHTML = daysOfYear[inputValues];
