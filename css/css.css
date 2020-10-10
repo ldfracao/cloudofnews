@@ -1,3 +1,7 @@
+/* imports */
+
+@import url("https://fonts.googleapis.com/css2?family=Parisienne&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Parisienne&family=Piazzolla&family=Roboto+Mono&display=swap");
 /* global styles */
 
 *,
@@ -33,29 +37,37 @@ h1 {
 }
 
 /* main styles */
-
-#date {
+.center {
+  text-align: center;
+}
+.label {
   color: white;
-  background-color: black;
-  font-size: 2vw;
-  padding: 1vw;
+  font-family: "Parisienne", cursive;
+  font-size: 5vw;
+}
+.date {
+  color: white;
+  background-color:black;
+  font-size: 4vw;
+  font-family: "Piazzolla", serif;
+  padding: 2vh 4vw;
+  margin-top: 5vh;
+  margin-left: 2vw;
+  box-shadow: 1px 1px 2px white;
+  border-radius: 100px;
 }
 
-.slidercontainer {
-position: relative;
-}
 .slider {
-  position: absolute;
-  margin: 0;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  margin: 5vh auto;
+  display: grid;
+  place-items: center;
   width: 80%;
   opacity: 0.8;
 }
 .slider:hover {
   opacity: 1;
 }
+
 main img {
   display: block;
   margin: 5vh auto;
@@ -94,12 +106,15 @@ footer {
     -ms-transform: translateY(-50%);
     transform: translateY(-50%);
   }
-  #date {
-    font-size: 1.3vw;
+  .label {
+    font-size: 3vw;
+  }
+  .date {
+    padding: 1vh 2vw;
+    font-size: 2.5vw;
   }
   footer {
     font-size: 1.3vw;
     text-align: justify;
   }
 }
-

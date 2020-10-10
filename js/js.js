@@ -27,7 +27,6 @@ slider.oninput = function () {
 
 // updates slider value when user enters an input
 dateControl.onchange = function () {
-  var getValue = document.getElementById("date").value;
-  slider.value = newDaysOfYear.indexOf(getValue);
+  slider.value = newDaysOfYear.indexOf(dateControl.value);
 }
 
