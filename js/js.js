@@ -5,14 +5,14 @@ var dateControl = document.querySelector('input[type="date"]');
 // loops through the dates backwards
 var d = new Date();
 var daysOfYear = [];
-for (i = 0; i < 101; i++) {
-  daysOfYear[0] = new Date().toJSON();
+for (i = 0; i <= 100; i++) {
   var b = d.setDate(d.getDate() - 1);
   daysOfYear.push(new Date(b).toJSON());
 }
+
 // converts daysOfYear to the correct date format
 var newDaysOfYear = [];
-for (j = 0; j < 101; j++){
+for (j = 0; j <= 100; j++){
   var c = daysOfYear[j].replace(/T.*/, "");
   newDaysOfYear.push(c);
 }
