@@ -18,7 +18,7 @@ body {
 
 header {
   min-height: 20%;
-  border-bottom: 3px solid white;
+  border-bottom: 3px solid rgb(0, 0, 80);
 }
 header img {
   display: block;
@@ -62,7 +62,7 @@ h1 {
   appearance: none;
   width: 80%;
   height: 4px;
-  background:blue;
+  background:rgb(0, 0, 80);
   margin: 5vh auto;
   opacity: 0.4;
 }
@@ -79,7 +79,7 @@ h1 {
   width: 25px;
   height: 25px;
   border-radius: 50%;
-  border-color: rgb(0, 0, 80);
+  border: 7px solid rgb(0, 0, 80);
   background: url("/favicon.ico");
   cursor: pointer;
 }
