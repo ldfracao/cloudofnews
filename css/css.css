@@ -34,15 +34,11 @@ h1 {
 
 /* main styles */
 
-input[type=text]{
-  color: white;
-  background-color: black;
-}
 #date {
   color: white;
+  background-color: black;
   font-size: 2vw;
-  text-align: right;
-  padding: 1.3vw;
+  padding: 1vw;
 }
 
 .slidercontainer {

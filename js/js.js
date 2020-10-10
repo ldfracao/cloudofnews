@@ -1,23 +1,33 @@
-var slider = document.getElementById("inputslider");
-var date = document.getElementById("date");
-var span = document.getElementById("span");
-var sliderValue = document.getElementById("inputslider").getAttribute("value");
+// selectors
+var slider = document.getElementById("inputslider"); 
+var dateControl = document.querySelector('input[type="date"]');
 
 // loops through the dates backwards
 var d = new Date();
 var daysOfYear = [];
-for (i = 0; i < 100; i++) {
-  daysOfYear[0] = new Date();
+for (i = 0; i < 101; i++) {
+  daysOfYear[0] = new Date().toJSON();
   var b = d.setDate(d.getDate() - 1);
-  daysOfYear.push(new Date(b));
+  daysOfYear.push(new Date(b).toJSON());
+}
+// converts daysOfYear to the correct date format
+var newDaysOfYear = [];
+for (j = 0; j < 101; j++){
+  var c = daysOfYear[j].replace(/T.*/, "");
+  newDaysOfYear.push(c);
 }
 
-date.innerHTML = daysOfYear[0]; // default date onload
+dateControl.value = newDaysOfYear[0]; //default value onload
 
-// iterates inputValues over daysOfYear array
+// iterates oninput inputValues over daysOfYear array
 slider.oninput = function () {
   var inputValues = this.value;
-  date.innerHTML = daysOfYear[inputValues];
+  dateControl.value = newDaysOfYear[inputValues];
 }
 
+// updates slider value when user enters an input
+dateControl.onchange = function () {
+  var getValue = document.getElementById("date").value;
+  slider.value = newDaysOfYear.indexOf(getValue);
+}
 
