@@ -8,17 +8,14 @@ response = requests.get("https://www1.folha.uol.com.br/internacional/en/")
 html = response.text
 soup = BeautifulSoup(html, "lxml")
 
-# finds tag that identifys a news article and selects its date
+# finds tag that identifys page as a news article
 findNews = soup.find(attrs={"property" : "article:published_time"})
 if bool(findNews) is True:
     findDate = findNews["content"]
     findDate = re.sub(r"\s.*", "", findDate)
-    
-hrefs = []
-validUrls = []
-urls_clean = []
 
 # finds all href attributes
+hrefs = []
 for i in soup.find_all(href = True):
     hrefs.append(i.attrs["href"])
 # hrefs = np.array(hrefs)
@@ -26,6 +23,7 @@ for i in soup.find_all(href = True):
 # print(len(hrefs))
 
 # validates hrefs as urls 
+validUrls = []
 for x in hrefs:
     hrefs = validators.url(x)
     if hrefs is True:
@@ -35,6 +33,7 @@ validUrls = np.array(validUrls)
 # print(len(validUrls))
 
 # removes duplicates
+urls_clean = []
 for i in validUrls:
     if i not in urls_clean:
         urls_clean.append(i)
@@ -44,11 +43,13 @@ for i in validUrls:
 
 filterArr = []
 for i in urls_clean:
-    if re.match("^https://www1.folha.uol.com.br/internacional/en/(?!o).*/$", i):
+    if re.match("^https://www1.folha.uol.com.br/internacional/en/", i):
        filterArr.append(i)    
 # filterArr = np.array(filterArr)
 # print(filterArr)
 # print(len(filterArr))
+
+# soupifies all valid and filtered links 
 newSoup = []
 for i in filterArr:
     innerResponse = requests.get(i)
@@ -59,6 +60,20 @@ newSoup = np.array(newSoup)
 print(newSoup)
 print(len(newSoup))
 # print(type(newSoup))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 # for i in urls_clean:
 #     urls_clean.remove("https://www1.folha.uol.com.br/internacional/en/opinion/")
