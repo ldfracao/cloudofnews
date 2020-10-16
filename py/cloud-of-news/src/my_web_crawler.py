@@ -90,7 +90,7 @@ for i in filterArr:
         innerResponse = requests.get(i)
         requestedUrls.append(i)
         i = innerResponse.text
-        soup = BeautifulSoup(i, "lxml")
+        newSoup = BeautifulSoup(i, "lxml")
         newSoup.append(i)
 # newSoup = np.array(newSoup)
 # print(requestedUrls)
