@@ -29,7 +29,7 @@ if bool(findNews) is True:
     validps = list(set(allps) - set(notps))
        
     for i in validps:
-        if re.match("^Seu", i) or re.match("^Por", i):
+        if re.match("^Seu e-mail", i) or re.match("^Por favor", i):
             validps.remove(i)
     
     # find relevant h1 and h2
