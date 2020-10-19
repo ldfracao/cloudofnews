@@ -4,9 +4,9 @@ from bs4 import BeautifulSoup
 import re
 import validators
 
-response = requests.get("https://www1.folha.uol.com.br/internacional/en/business/2020/10/brazil-lags-behind-chile-uruguay-and-argentina-in-development-ranking.shtml?utm_source=newsletter&utm_medium=email&utm_campaign=newsen")
+response = requests.get("https://www1.folha.uol.com.br/internacional/en/brazil/2020/09/brazil-should-be-congratulated-for-caring-for-the-environment-says-bolsonaro.shtml?utm_source=newsletter&utm_medium=email&utm_campaign=newsen")
 html = response.text
-html = html.replace(",", "").replace("\"", "")
+html = html.replace(",", "").replace("\"", "").replace("\n", "").replace("\r", "")
 soup = BeautifulSoup(html, "lxml")
 
 requestedUrls = ["https://www1.folha.uol.com.br/internacional/en/"]
@@ -19,33 +19,34 @@ if bool(findNews) is True:
 
     # find relevant paragraphs
     allps = []
-    notps = []
     for i in soup.find_all("p"):
-        if bool(i.find()) is False:
-            allps.append(i.text.strip())
-    for i in soup.find_all("p" , attrs = {re.compile("."), re.compile(".")}):
-        notps.append(i.text.strip())
+        allps.append(i.text)
+    # for i in soup.find_all("p" , attrs = {re.compile("."), re.compile(".")}):
+    #     allps.remove(i.text)
+    allps = allps[:-6]
+    print(allps)
+    print(len(allps))
     
-    validps = list(set(allps) - set(notps))
-       
-    for i in validps:
-        if re.match("^Seu e-mail", i) or re.match("^Por favor", i):
-            validps.remove(i)
-    
-    # find relevant h1 and h2
-    text = []
+    # find relevant headers
+    headers = []
     for i in soup.find_all(["h1", "h2"]):
-        text.append(i.text.strip()) 
-           
-    text = text + validps
+        headers.append(i.text.strip())
+    headers = headers[2:]
+    print(headers)
+    print(len(headers))
 
+    text = allps + headers
+   
+    print(text)
+    print(len(text))
     # removes possible duplicates 
     text_clean = []
     for i in text:
         if i not in text_clean:
             text_clean.append(i)
 
-print(text_clean)
+    # print(text_clean)
+    # print(len(text_clean))
 
 # finds all href attributes
 hrefs = []
@@ -90,6 +91,7 @@ for i in filterArr:
         innerResponse = requests.get(i)
         requestedUrls.append(i)
         i = innerResponse.text
+        i = i.replace(",", "").replace("\"", "").replace("\n", "").replace("\r", "")
         newSoup = BeautifulSoup(i, "lxml")
         newSoup.append(i)
 # newSoup = np.array(newSoup)
