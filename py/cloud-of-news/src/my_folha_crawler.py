@@ -4,7 +4,7 @@ from bs4 import BeautifulSoup
 import re
 import validators
 
-response = requests.get("https://www1.folha.uol.com.br/internacional/en/brazil/2020/09/brazil-should-be-congratulated-for-caring-for-the-environment-says-bolsonaro.shtml?utm_source=newsletter&utm_medium=email&utm_campaign=newsen")
+response = requests.get("https://www1.folha.uol.com.br/internacional/en/business/2020/10/brazil-lags-behind-chile-uruguay-and-argentina-in-development-ranking.shtml?utm_source=newsletter&utm_medium=email&utm_campaign=newsen")
 html = response.text
 html = html.replace(",", "").replace("\"", "").replace("\n", "").replace("\r", "")
 soup = BeautifulSoup(html, "lxml")
@@ -21,24 +21,22 @@ if bool(findNews) is True:
     allps = []
     for i in soup.find_all("p"):
         allps.append(i.text)
-    # for i in soup.find_all("p" , attrs = {re.compile("."), re.compile(".")}):
-    #     allps.remove(i.text)
     allps = allps[:-6]
-    print(allps)
-    print(len(allps))
+    # print(allps)
+    # print(len(allps))
     
     # find relevant headers
     headers = []
     for i in soup.find_all(["h1", "h2"]):
         headers.append(i.text.strip())
     headers = headers[2:]
-    print(headers)
-    print(len(headers))
+    # print(headers)
+    # print(len(headers))
 
     text = allps + headers
    
-    print(text)
-    print(len(text))
+    # print(text)
+    # print(len(text))
     # removes possible duplicates 
     text_clean = []
     for i in text:
