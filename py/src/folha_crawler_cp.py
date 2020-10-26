@@ -5,7 +5,7 @@ import re
 
 import pymysql.cursors
 
-response = requests.get("https://www1.folha.uol.com.br/internacional/en/saopaulo/2018/08/needlework-brings-hope-back-in-tremembe-womens-prison.shtml")
+response = requests.get("https://www1.folha.uol.com.br/internacional/en/saopaulo/2020/10/reopening-of-schools-leaves-teachers-unsure-of-coronavirus.shtml")
 html = response.text
 html = html.replace(",", "").replace("\"", "").replace("\n", "").replace("\r", "")
 soup = BeautifulSoup(html, "lxml")
@@ -28,32 +28,40 @@ if findNews:
     # find relevant paragraphs
     allps = []
     notps = []
-
+    textps = []
     for i in soup.find_all("p" , attrs = {re.compile("."), re.compile(".")}):
             notps.append(i)
+    print(notps)
+    print(len(notps))
     for i in soup.find_all("p"):
-        if (bool(i.find()) is False or i.find("br")):
+        if bool(i.find()) is False or i.find("br") or i.find("strong"):
             allps.append(i)    #.text.strip()
-    for i in allps:
-        if i.find("sup") or i.find("sub"):
+        try:
+            if i.find("sup") or i.find("sub"):
+                 allps.remove(i)
+        except:
+            pass
+        if re.match("^â", i.text):
             allps.remove(i)
-    for i in allps:
-        if re.match("^â", str(i.string)):
-            allps.remove(i)
+
+    print(allps)
+    print(len(allps))
     allps = allps[:-2]
-    # allps = list(set(allps) - set(notps))
+    allps = list(set(allps) - set(notps))
+    print(allps)
+    print(len(allps))
+ 
+    for i in allps:
+        textps.append(i.text)
+    print(textps)
+    print(len(textps))
     # allps = str(allps)
     # allps = allps.replace("<p>", "").replace("</p>", "").replace("<br/>", "")
         # if i.find(attrs={re.compile("."): re.compile(".")}):
         #     allps.remove(i)
 
     # allps = allps[:-6]
-    # print(notps)
-    # print(len(notps))
-    print(allps)
-    print(len(allps))
-    # print(notps)
-    # print(len(allps))
+
     # find relevant headers
     headers = []
     h2s = []
