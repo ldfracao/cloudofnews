@@ -20,49 +20,64 @@ def crawl(arg):
 
         # find relevant paragraphs
         allps = []
+        notps = []
+        textps = []
+
+        # finds ps with attributes
+        for i in arg.find_all("p" , attrs = {re.compile("."), re.compile(".")}):
+                notps.append(i)
+        # finds ps that don't have children and with <br> as a child
         for i in arg.find_all("p"):
-            allps.append(i.text)
-        allps = allps[:-6]
-        # print(allps)
-        # print(len(allps))
-        
+            if bool(i.find()) is False or i.find("br") or i.find("strong"):
+                allps.append(i)
+        # if p has a child of sup or sub remove it, in case not pass
+            try:
+                if i.find("sup") or i.find("sub"):
+                    allps.remove(i)
+            except:
+                pass
+        # removes empty paragraphs contained in some pages
+            try:
+                if re.match("^â", i.text):
+                    allps.remove(i)
+            except:
+                pass
+
+        allps = allps[:-2]  # removes the last 2 paragraphs
+
+        allps = list(set(allps) - set(notps))   # excludes unwanted ps
+
+        # grabs the text of ps
+        for i in allps:
+            textps.append(i.text)
+
         # find relevant headers
         headers = []
         for i in arg.find_all("h1"):
             headers.append(i.text.strip())
         for i in arg.h2:
+            i = i.strip()
             headers.append(i)
         headers = headers[2:]
-        # print(headers)
-        # print(len(headers))
 
-        text = allps + headers
-    
-        # print(text)
-        # print(len(text))
+        textps = textps + headers
 
         # removes possible duplicates 
         text_clean = []
-        for i in text:
+        for i in textps:
             if i not in text_clean:
                 text_clean.append(i)
-                
+
         file = open("test.txt", "a")
         file.write(str(text_clean))
         file.write(str(len(text_clean)))
         file.close()
-        # print(text_clean[2])
-        # print(text_clean)
-        # print(len(text_clean))
 
     else:
         # finds all href attributes
         hrefs = []
         for i in arg.find_all(href = True):
             hrefs.append(i.attrs["href"])
-        # hrefs = np.array(hrefs)
-        # print(hrefs)
-        # print(len(hrefs))
 
         # validates hrefs as urls 
         validUrls = []
@@ -70,18 +85,12 @@ def crawl(arg):
             hrefs = validators.url(x)
             if hrefs is True:
                 validUrls.append(x)
-        # validUrls = np.array(validUrls)
-        # print(validUrls)
-        # print(len(validUrls))
 
         # removes duplicates
         urls_clean = []
         for i in validUrls:
             if i not in urls_clean:
                 urls_clean.append(i)
-        # urls_clean = np.array(urls_clean)
-        # print(urls_clean)
-        # print(len(urls_clean))
 
         # filters links 
         filterArr = []
@@ -94,10 +103,6 @@ def crawl(arg):
                     filterArr.remove(i)
                 if re.match("^https://www1.folha.uol.com.br/internacional/en/.*newsen$", i):
                     filterArr.remove(i)
-
-        # filterArr = np.array(filterArr)
-        # print(filterArr)
-        # print(len(filterArr))
 
         # soupifies all valid and filtered links 
         newSoup = []
@@ -115,12 +120,3 @@ file = open("requestedUrls.txt", "a")
 file.write(str(requestedUrls))
 file.write(str(len(requestedUrls)))
 file.close()
-
-
-        # newSoup = np.array(newSoup)
-        # print(requestedUrls)
-        # print(len(requestedUrls))
-
-        # print(newSoup)
-        # print(len(newSoup))
-        # print(type(newSoup))
