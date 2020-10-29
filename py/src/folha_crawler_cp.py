@@ -1,109 +1,106 @@
 import requests
-
 from bs4 import BeautifulSoup
 import re
-
+from elasticsearch import Elasticsearch
+import json
 import pymysql.cursors
 
-response = requests.get("https://www1.folha.uol.com.br/internacional/en/saopaulo/2020/10/reopening-of-schools-leaves-teachers-unsure-of-coronavirus.shtml")
+response = requests.get("https://www1.folha.uol.com.br/internacional/en/saopaulo/2018/08/needlework-brings-hope-back-in-tremembe-womens-prison.shtml")
 html = response.text
-html = html.replace(",", "").replace("\"", "").replace("\n", "").replace("\r", "")
 soup = BeautifulSoup(html, "lxml")
 # print(soup.original_encoding)
 requestedUrls = ["https://www1.folha.uol.com.br/internacional/en/"]
 
-# def findsoup(soup):
-    # finds tag that identifies page as a news article
 findNews = soup.find(attrs={"property" : "article:published_time"})
 if findNews:
     findDate = findNews["content"]
     findDate = re.sub(r"\s.*", "", findDate)
-    # findDate = b"findDate"
-    findDate = str(findDate)
-    # print(findDate)
-    # print(type(findDate))
-    # print(datetuple)
-    # print(type(datetuple))
 
     # find relevant paragraphs
     allps = []
     notps = []
     textps = []
+
+    # finds ps with attributes
     for i in soup.find_all("p" , attrs = {re.compile("."), re.compile(".")}):
             notps.append(i)
-    print(notps)
-    print(len(notps))
+    # finds ps that don't have children and with <br> as a child
     for i in soup.find_all("p"):
         if bool(i.find()) is False or i.find("br") or i.find("strong"):
-            allps.append(i)    #.text.strip()
+            allps.append(i)
+    # if p has a child of sup or sub remove it, in case not pass
         try:
             if i.find("sup") or i.find("sub"):
-                 allps.remove(i)
+                allps.remove(i)
         except:
             pass
-        if re.match("^â", i.text):
-            allps.remove(i)
+    # removes empty paragraphs contained in some pages
+        try:
+            if re.match("^â", i.text):
+                allps.remove(i)
+        except:
+            pass
 
-    print(allps)
-    print(len(allps))
-    allps = allps[:-2]
-    allps = list(set(allps) - set(notps))
-    print(allps)
-    print(len(allps))
- 
+    allps = allps[:-2]  # removes the last 2 paragraphs
+
+    allps = list(set(allps) - set(notps))   # excludes unwanted ps
+
+    # grabs the text of ps
     for i in allps:
         textps.append(i.text)
-    print(textps)
-    print(len(textps))
-    # allps = str(allps)
-    # allps = allps.replace("<p>", "").replace("</p>", "").replace("<br/>", "")
-        # if i.find(attrs={re.compile("."): re.compile(".")}):
-        #     allps.remove(i)
-
-    # allps = allps[:-6]
 
     # find relevant headers
     headers = []
-    h2s = []
     for i in soup.find_all("h1"):
         headers.append(i.text.strip())
     for i in soup.h2:
         i = i.strip()
-        h2s.append(i)
+        headers.append(i)
     headers = headers[2:]
-    
-    # print(headers)
-    # print(h2s)
-    # print(len(headers))
 
-    text = allps + headers
-
-    # print(text)
-    # print(len(text))
+    textps = textps + headers
 
     # removes possible duplicates 
     text_clean = []
-    for i in text:
+    for i in textps:
         if i not in text_clean:
             text_clean.append(i)
-    # text_clean = b"text_clean"
     text_clean = str(text_clean)
-    # texttuple = tuple(text_clean)
-    # text_clean = text_clean.encode("utf-8")
+    text_clean = text_clean.replace(".", "").replace(",", "").replace("(", "").replace(")", "").replace("'", "").replace("\"", "").replace("[", "").replace("]", "")
+    print(text_clean)
+    print(type(text_clean))
+    # text_clean = json.dumps(text_clean)
     # print(text_clean)
-    # print(type(texttuple))
+    # print(type(text_clean))
 
+    client = Elasticsearch("http://localhost:9200")
+
+    doc = { "date" : findDate, "string" : text_clean }
+
+    # datedoc = { "date" : findDate }
+
+    client.index( "testindex", doc )
+    # client.indices.delete("testindex")
+    # client.indices.delete("date")
+    # client.index( "date", datedoc )
+    # print(dir(client))
+    # print(text_clean)
+    # print(type(text_clean))
+    # res = requests.post("http://localhost:9200/testindex/", data="text" , json=text_clean)
+    # print(res)
+
+    # (/{index}/_doc/{id}, /{index}/_doc, or /{index}/_create/{id}) 
     # server connection
-    conn = pymysql.connect(
-        host='localhost',
-        user='pimblus',
-        database='testdb',
-        passwd='Gv34@-aT'
-    )
-    try:
-        with conn.cursor() as cursor:
-            sql = "SELECT Date FROM crawl WHERE Date = %s;"
-            val = (findDate)
+    # conn = pymysql.connect(
+    #     host='localhost',
+    #     user='pimblus',
+    #     database='testdb',
+    #     passwd='Gv34@-aT'
+    # )
+    # try:
+    #     with conn.cursor() as cursor:
+    #         sql = "SELECT Date FROM crawl WHERE Date = %s;"
+    #         val = (findDate)
             # sentence = cursor.execute(sql, val)
             # print(sentence)
             # print(type(sentence))
@@ -116,7 +113,7 @@ if findNews:
                 # cursor.execute(query, val)
             # else:
                 # INSERT NEW FIELD
-        conn.commit()
-    finally:
-        conn.close()
+    #     conn.commit()
+    # finally:
+    #     conn.close()
   
