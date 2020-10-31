@@ -1,12 +1,12 @@
+from bs4 import BeautifulSoup 
+from elasticsearch import Elasticsearch
 import requests
-import numpy as np
-from bs4 import BeautifulSoup
 import re
 import validators
 
+# client = Elasticsearch("http://localhost:9200")
 response = requests.get("https://www1.folha.uol.com.br/internacional/en/")
 html = response.text
-html = html.replace(",", "").replace("\"", "").replace("\n", "").replace("\r", "")
 soup = BeautifulSoup(html, "lxml")
 
 requestedUrls = ["https://www1.folha.uol.com.br/internacional/en/"]
@@ -28,11 +28,11 @@ def crawl(arg):
                 notps.append(i)
         # finds ps that don't have children and with <br> as a child
         for i in arg.find_all("p"):
-            if bool(i.find()) is False or i.find("br") or i.find("strong"):
+            if bool(i.find()) is False or i.find("br") or i.find("strong") or i.find("b"):
                 allps.append(i)
         # if p has a child of sup or sub remove it, in case not pass
             try:
-                if i.find("sup") or i.find("sub"):
+                if i.find("sup") or i.find("sub") or i.find("a"):
                     allps.remove(i)
             except:
                 pass
@@ -47,17 +47,18 @@ def crawl(arg):
 
         allps = list(set(allps) - set(notps))   # excludes unwanted ps
 
-        # grabs the text of ps
+        # grabs the text of ps in the right encoding
         for i in allps:
-            textps.append(i.text)
+            i = i.text.encode("latin-1", "ignore").decode("utf-8", "ignore")
+            textps.append(i)
 
         # find relevant headers
         headers = []
         for i in arg.find_all("h1"):
-            headers.append(i.text.strip())
+            headers.append(i.text.encode("latin-1").decode("utf-8").strip())
         for i in arg.h2:
-            i = i.strip()
-            headers.append(i)
+            headers.append(i.encode("latin-1").decode("utf-8").strip())
+
         headers = headers[2:]
 
         textps = textps + headers
@@ -68,10 +69,14 @@ def crawl(arg):
             if i not in text_clean:
                 text_clean.append(i)
 
-        file = open("test.txt", "a")
-        file.write(str(text_clean))
-        file.write(str(len(text_clean)))
-        file.close()
+        # elasticsearch integration
+        # doc = { "date" : findDate, "string" : text_clean }
+        # client.index( "cloudofnews", doc )
+        # text_clean = str(text_clean)
+        # file = open("test.txt", "a")
+        # file.write(text_clean)
+        # file.write(str(len(text_clean)))
+        # file.close()
 
     else:
         # finds all href attributes
@@ -111,12 +116,12 @@ def crawl(arg):
                 requestedUrls.append(i)
                 innerResponse = requests.get(i)
                 i = innerResponse.text
-                i = i.replace(",", "").replace("\"", "").replace("\n", "").replace("\r", "")
+                # i = i.replace(",", "").replace("\"", "").replace("\n", "").replace("\r", "")
                 newSoup = BeautifulSoup(i, "lxml")
                 newSoup.append(i)
                 crawl(newSoup)
+    file = open("requestedUrls.txt", "a")
+    file.write(str(requestedUrls))
+    file.write(str(len(requestedUrls)))
+    file.close()
 crawl(soup)
-file = open("requestedUrls.txt", "a")
-file.write(str(requestedUrls))
-file.write(str(len(requestedUrls)))
-file.close()
