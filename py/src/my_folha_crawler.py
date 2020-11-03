@@ -26,7 +26,7 @@ def crawl(arg):
         # finds ps with attributes
         for i in arg.find_all("p" , attrs = {re.compile("."), re.compile(".")}):
                 notps.append(i)
-        # finds ps that don't have children and with <br> as a child
+        # finds ps that don't have or have children as tags <br>, <strong> or <b>
         for i in arg.find_all("p"):
             if bool(i.find()) is False or i.find("br") or i.find("strong") or i.find("b"):
                 allps.append(i)
@@ -44,7 +44,6 @@ def crawl(arg):
                 pass
 
         allps = allps[:-2]  # removes the last 2 paragraphs
-
         allps = list(set(allps) - set(notps))   # excludes unwanted ps
 
         # grabs the text of ps in the right encoding
@@ -60,7 +59,6 @@ def crawl(arg):
             headers.append(i.encode("latin-1").decode("utf-8").strip())
 
         headers = headers[2:]
-
         textps = textps + headers
 
         # removes possible duplicates 
@@ -68,20 +66,20 @@ def crawl(arg):
         for i in textps:
             if i not in text_clean:
                 text_clean.append(i)
-
+        text_clean = str(text_clean)
+        text_clean = text_clean.replace("\\n", "").replace("\\r", " ").replace("\\u200b", "")
         # elasticsearch integration
         # doc = { "date" : findDate, "string" : text_clean }
         # client.index( "cloudofnews", doc )
         # text_clean = str(text_clean)
-        # file = open("test.txt", "a")
-        # file.write(text_clean)
-        # file.write(str(len(text_clean)))
-        # file.close()
-
+        file = open("test.txt", "a")
+        file.write(str(text_clean))
+        file.write(str(len(text_clean)))
+        file.close()
     else:
         # finds all href attributes
         hrefs = []
-        for i in arg.find_all(href = True):
+        for i in arg.find_all("a", href = True):
             hrefs.append(i.attrs["href"])
 
         # validates hrefs as urls 
@@ -100,14 +98,19 @@ def crawl(arg):
         # filters links 
         filterArr = []
         for i in urls_clean:
-            if re.match("^https://www1.folha.uol.com.br/internacional/en/.*/", i):
+            if re.match("^htt(p|ps)://www1.folha.uol.com.br/internacional/en/.*/", i):
                 filterArr.append(i)
-                if re.match("^https://www1.folha.uol.com.br/internacional/en/ombudsman/.*", i):
+                if re.match("^htt(p|ps)://www1.folha.uol.com.br/internacional/en/ombudsman.*", i):
                     filterArr.remove(i)
-                if re.match("^https://www1.folha.uol.com.br/internacional/en/opinion/.*", i):
+                if re.match("^htt(p|ps)://www1.folha.uol.com.br/internacional/en/opinion.*", i):
                     filterArr.remove(i)
-                if re.match("^https://www1.folha.uol.com.br/internacional/en/.*newsen$", i):
+                if re.match("^htt(p|ps)://www1.folha.uol.com.br/internacional/en/.*newsen$", i):
                     filterArr.remove(i)
+                try:
+                    if re.match("^htt(p|ps)://www1.folha.uol.com.br/internacional/en/.*opinion.*", i):
+                        filterArr.remove(i)
+                except:
+                    pass
 
         # soupifies all valid and filtered links 
         newSoup = []
@@ -116,12 +119,12 @@ def crawl(arg):
                 requestedUrls.append(i)
                 innerResponse = requests.get(i)
                 i = innerResponse.text
-                # i = i.replace(",", "").replace("\"", "").replace("\n", "").replace("\r", "")
                 newSoup = BeautifulSoup(i, "lxml")
                 newSoup.append(i)
                 crawl(newSoup)
-    file = open("requestedUrls.txt", "a")
-    file.write(str(requestedUrls))
-    file.write(str(len(requestedUrls)))
-    file.close()
+
 crawl(soup)
+file = open("requestedUrls.txt", "a")
+file.write(str(requestedUrls))
+file.write(str(len(requestedUrls)))
+file.close()
