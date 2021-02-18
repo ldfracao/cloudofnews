@@ -2,6 +2,7 @@
 
 @import url("https://fonts.googleapis.com/css2?family=Parisienne&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Parisienne&family=Piazzolla&family=Roboto+Mono&display=swap");
+
 /* global styles */
 
 *,
@@ -16,24 +17,17 @@ body {
 
 /* header styles */
 
-header {
-  min-height: 20%;
-  border-bottom: 3px solid rgb(0, 0, 80);
+header
+{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 20vh;
+  border-bottom: 2px solid white;
 }
-header img {
-  display: block;
-  margin: 0 auto;
-  max-width: 50%;
-  height: auto;
-}
-
-h1 {
-  display: grid;
-  place-items: center;
-  height: 15vh;
-  background-color: black;
+h1
+{
   color: white;
-  font-size: 4vw;
 }
 
 /* main styles */
