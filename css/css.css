@@ -22,12 +22,26 @@ header
   display: flex;
   justify-content: space-between;
   align-items: center;
+  width: 100%;
   height: 20vh;
   border-bottom: 2px solid white;
 }
 h1
 {
   color: white;
+}
+.material-icons
+{
+  font-size: 2.25rem;
+  color: white;
+}
+.btn
+{
+  display: block;
+  margin-right: 3vw;
+  /* background-color: white; */
+  padding: 2vh 1vw;
+  border-radius: 50%;
 }
 
 /* main styles */
