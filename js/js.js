@@ -24,7 +24,7 @@ dateControl.value = newDaysOfYear[0]; //default value onload
 dateControl.onchange = function () {
   slider.value = newDaysOfYear.indexOf(dateControl.value);
   var xhr = new XMLHttpRequest();
-  var imgName = "../imgs/" + dateControl.value + ".png";
+  var imgName = "../imgs/cloudstest/" + dateControl.value + ".png";
   xhr.onreadystatechange = function () {
     if(this.readyState == 4 && this.status == 200){
       imgSrc.src = this.responseURL;
@@ -37,7 +37,7 @@ dateControl.onchange = function () {
 // forces the default image to today's image
 function defaultImage() {
   var xhr = new XMLHttpRequest();
-  var imgName = "../imgs/" + dateControl.value + ".png";
+  var imgName = "../imgs/cloudstest/" + dateControl.value + ".png";
   xhr.onreadystatechange = function () {
     if(this.readyState == 4 && this.status == 200){
       imgSrc.src = this.responseURL;
@@ -53,7 +53,7 @@ slider.oninput = function () {
   var xhr = new XMLHttpRequest();
   var inputValues = this.value;
   dateControl.value = newDaysOfYear[inputValues];
-  var imgName = "../imgs/" + dateControl.value + ".png";
+  var imgName = "../imgs/cloudstest/" + dateControl.value + ".png";
   xhr.onreadystatechange = function () {
     if(this.readyState == 4 && this.status == 200){
       imgSrc.src = this.responseURL;

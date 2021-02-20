@@ -1,5 +1,8 @@
 from bs4 import BeautifulSoup 
 from elasticsearch import Elasticsearch
+from wordcloud import WordCloud, ImageColorGenerator
+from PIL import Image
+import numpy as np
 import requests
 import re
 import validators
@@ -69,11 +72,19 @@ def crawl(arg):
             if i not in text_clean:
                 text_clean.append(i)
         text_clean = str(text_clean)
-        text_clean = text_clean.replace("\\n", "").replace("\\r", " ").replace("\\u200b", "")
+        text_clean = text_clean.replace("\\n", "").replace("\\r", " ").replace("\\u200b", "").replace("\\", "")
 
         # elasticsearch integration
         doc = { "date" : findDate, "string" : text_clean , "links" : link}
         client.index( "cloudofnews", doc )
+
+        # wordcloud
+        # wc = WordCloud()
+        root_path = "/home/pimblus/Documents/cloud-of-news-v1.1/"
+        custom_mask = np.array(Image.open(root_path + "imgs/mask3.jpg"))
+        wc = WordCloud(background_color="black", mask=custom_mask)
+        wc.generate(text_clean)
+        wc.to_file(root_path + 'imgs/cloudstest/' + findDate + '.png')
 
     else:
         # finds all href attributes
