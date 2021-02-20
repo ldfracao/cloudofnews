@@ -4,7 +4,7 @@ import requests
 import re
 import validators
 
-# client = Elasticsearch("http://localhost:9200")
+client = Elasticsearch("http://localhost:9200")
 response = requests.get("https://www1.folha.uol.com.br/internacional/en/")
 html = response.text
 soup = BeautifulSoup(html, "lxml")
@@ -17,6 +17,8 @@ def crawl(arg):
     if findNews:
         findDate = findNews["content"]
         findDate = re.sub(r"\s.*", "", findDate)
+
+        link = arg.find("link")["href"]
 
         # find relevant paragraphs
         allps = []
@@ -68,14 +70,11 @@ def crawl(arg):
                 text_clean.append(i)
         text_clean = str(text_clean)
         text_clean = text_clean.replace("\\n", "").replace("\\r", " ").replace("\\u200b", "")
+
         # elasticsearch integration
-        # doc = { "date" : findDate, "string" : text_clean }
-        # client.index( "cloudofnews", doc )
-        # text_clean = str(text_clean)
-        file = open("test.txt", "a")
-        file.write(str(text_clean))
-        file.write(str(len(text_clean)))
-        file.close()
+        doc = { "date" : findDate, "string" : text_clean , "links" : link}
+        client.index( "cloudofnews", doc )
+
     else:
         # finds all href attributes
         hrefs = []
@@ -124,7 +123,3 @@ def crawl(arg):
                 crawl(newSoup)
 
 crawl(soup)
-file = open("requestedUrls.txt", "a")
-file.write(str(requestedUrls))
-file.write(str(len(requestedUrls)))
-file.close()
