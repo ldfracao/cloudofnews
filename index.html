@@ -48,41 +48,36 @@
 
   <body>
     <header>
+      <nav class="menu">
+        <i class="material-icons">view_headline</i>
+        <i class="material-icons">search</i>
+      </nav>
       <div class="logo">
         <img src="imgs/world-map-invert.jpg" alt="World map icon" />
       </div>
       <h1>CLOUD OF NEWS - WORLD HEADLINES</h1>
-      <nav class="menu">
-          <i class="material-icons"><span class="btn">search</span></i>
-          <i class="material-icons"><span class="btn">view_headline</span></i>
-      </nav>
     </header>
+    <hr>
 
     <!-- main content -->
     <main>
-      <div class="center">
-        <label for="date" class="label"
-          >Travel to the past:
-          <input type="date" value="" name="date" class="date" />
+        <label>Travel to the past:
+          <input type="date" value="" class="date" />
         </label>
-      </div>
-      <div class="center">
-        <label for="range">
+        <label>
           <input
             type="range"
             min="0"
             max="100"
             value="0"
-            class="slider"
             id="inputslider"
           />
         </label>
-      </div>
       <a href="https://www1.folha.uol.com.br/internacional/en/">
-        <img src="" alt="Wordcloud world map" class="map" id="map" />
+        <img src="/imgs/test1-en.png" alt="Wordcloud world map" class="map" id="map" />
       </a>
     </main>
-
+    <hr>
     <!-- footer -->
     <footer>
       <p>
@@ -91,7 +86,6 @@
         display them in a wordcloud format, so you can get a glimpse of what is
         going on around the world.
       </p>
-      <br />
       <p>
         What is a wordcloud? <br />
         According to Google it is
@@ -100,7 +94,6 @@
           which the size of each word indicates its frequency or importance.</q
         >
       </p>
-      <br />
       <p>
         If you would like to receive alerts for when specific keywords occur
         around the world contact us at:
