@@ -35,9 +35,6 @@ h1 {
   font-size: 2.5rem;
   font-family: 'Courier New', Courier, monospace;
 }
-hr {
-  color: white;
-}
 
 /* main styles */
 
@@ -100,32 +97,14 @@ footer {
 
 @media only screen and (min-width: 768px) {
   h1 {
-    font-size: 3.8rem;
+    font-size: 3.5rem;
   }
   header {
-    position: relative;
-    overflow: auto;
+    display: grid;
+    place-items: center;
   }
-  header img {
-    max-width: 11%;
-    height: auto;
-    float: left;
-    display: block;
-    margin: 0;
-    position: absolute;
-    top: 50%;
-    -ms-transform: translateY(-50%);
-    transform: translateY(-50%);
-  }
-  .label {
-    font-size: 4rem;
-  }
-  .date {
-    padding: 0.5em;
-    font-size: 3rem;
-  }
-  footer {
-    font-size: 2rem;
-    text-align: justify;
+  nav {
+    grid-column: 3;
+    grid-row: 1;
   }
 }
