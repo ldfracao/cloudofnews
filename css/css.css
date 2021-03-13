@@ -81,7 +81,7 @@ label {
   background: white;
   cursor: pointer;
 }
-main img {
+img {
   max-width: 100%;
 }
 
@@ -98,14 +98,28 @@ footer {
 
 @media only screen and (min-width: 768px) {
   h1 {
-    font-size: 3.5rem;
+    font-size: 4rem;
   }
   header {
     display: grid;
     place-items: center;
+    justify-content: space-between;
+    margin-top: 1em;
   }
   nav {
     grid-column: 3;
     grid-row: 1;
+  }
+  nav > *{
+    margin-right: 1em;
+  }
+  label {
+    font-size: 3.5rem;
+  }
+  .date {
+    font-size: 2.5rem;
+  }
+  footer {
+    font-size: 2rem;
   }
 }
