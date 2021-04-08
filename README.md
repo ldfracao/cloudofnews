@@ -1,6 +1,6 @@
 ### DISCLAIMER
 
-This repository offer no licenses
+This repository offers no licenses
 
 # cloudofnews
 
