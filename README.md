@@ -1,7 +1,5 @@
 ### DISCLAIMER
 
-This repository offers no licenses
+This repository offers **no licenses**
 
-# cloudofnews
-
-The intention of this website is to crawl multiple news sources in order to create a wordcloud attached to specific dates.
+The intention of this project is to crawl multiple news sources in order to create a wordcloud attached to specific dates.
